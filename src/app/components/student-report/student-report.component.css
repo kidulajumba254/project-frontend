@@ -1,0 +1,130 @@
+.report-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.report-container h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1.25rem;
+    background: hsl(210, 40%, 98%);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.625rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-size: 0.875rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--ring);
+}
+
+.export-buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.table-container {
+    overflow-x: auto;
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    background: hsl(210, 40%, 98%);
+    padding: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--secondary);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 1rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--foreground);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background-color: hsl(210, 40%, 99%);
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    font-size: 0.875rem;
+    color: var(--secondary);
+}
+
+.btn-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-group button {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-group button:hover:not(:disabled) {
+    background: var(--background);
+    border-color: var(--secondary);
+}
+
+.btn-group button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

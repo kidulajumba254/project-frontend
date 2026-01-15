@@ -1,0 +1,22 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>{{ title() }}</h1>
+      <div class="actions">
+        <button class="btn btn-primary" (click)="onGenerateData()">Generate Mock Data</button>
+        <div class="upload-wrapper">
+          <label for="excel-upload" class="btn btn-secondary">Process Excel</label>
+          <input id="excel-upload" type="file" (change)="onFileSelected($event)" style="display: none;">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <app-student-report></app-student-report>
+  </main>
+
+  <app-progress-overlay [update]="currentProgress"></app-progress-overlay>
+</div>
+
+<router-outlet />

@@ -1,0 +1,72 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.progress-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.progress-card h3 {
+  font-size: 1.25rem;
+  color: var(--foreground);
+}
+
+.progress-bar-container {
+  height: 10px;
+  background: hsl(214, 32%, 91%);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #818cf8);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.percentage {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-align: center;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.stats>div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--secondary);
+  text-transform: uppercase;
+}
