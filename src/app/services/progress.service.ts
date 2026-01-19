@@ -19,6 +19,7 @@ export interface ProgressUpdate {
 export class ProgressService {
   private stompClient: Client | null = null;
   private progressUpdates = new BehaviorSubject<ProgressUpdate | null>(null);
+  progressUpdates$ = this.progressUpdates.asObservable();
 
   private isProcessingSubject = new BehaviorSubject<boolean>(false);
   isProcessing$ = this.isProcessingSubject.asObservable();

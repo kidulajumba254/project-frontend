@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StudentService } from '../../services/student.service';
+import { ProgressService } from '../../services/progress.service';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription, throttleTime } from 'rxjs';
 
 @Component({
   selector: 'app-student-report',
@@ -29,6 +32,7 @@ import { StudentService } from '../../services/student.service';
         <button class="btn btn-sm btn-primary" (click)="onExport('excel')">Export Excel</button>
         <button class="btn btn-sm btn-secondary" (click)="onExport('csv')">Export CSV</button>
         <button class="btn btn-sm btn-success" (click)="onExport('pdf')">Export PDF</button>
+        
       </div>
 
       <div class="table-container">
@@ -49,7 +53,7 @@ import { StudentService } from '../../services/student.service';
               <td>{{ s.firstName }}</td>
               <td>{{ s.lastName }}</td>
               <td>{{ s.dob }}</td>
-              <td>{{ s.className }}</td>
+              <td>{{ s.studentClass }}</td>
               <td>{{ s.score }}</td>
             </tr>
           </tbody>
@@ -76,11 +80,31 @@ export class StudentReportComponent implements OnInit {
   size = 10;
   totalPages = 0;
   totalElements = 0;
+  private progressSub?: Subscription;
 
-  constructor(private studentService: StudentService) { }
+  constructor(
+    private studentService: StudentService,
+    private progressService: ProgressService,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit() {
     this.loadStudents();
+    this.setupProgressMonitoring();
+  }
+
+  ngOnDestroy() {
+    this.progressSub?.unsubscribe();
+  }
+
+  setupProgressMonitoring() {
+    this.progressSub = this.progressService.progressUpdates$.pipe(
+      throttleTime(2000, undefined, { leading: true, trailing: true })
+    ).subscribe(update => {
+      if (update) {
+        this.loadStudents();
+      }
+    });
   }
 
   loadStudents() {
@@ -88,13 +112,13 @@ export class StudentReportComponent implements OnInit {
       page: this.page,
       size: this.size
     };
-    if (this.searchId) params.search = this.searchId;
-    if (this.selectedClass !== 'All') params.className = this.selectedClass;
+    if (this.searchId) params.studentId = this.searchId;
+    if (this.selectedClass !== 'All') params.studentClass = this.selectedClass;
 
     this.studentService.getStudents(params).subscribe((res: any) => {
-      this.students = res.content;
+      this.students = res.students;
       this.totalPages = res.totalPages;
-      this.totalElements = res.totalElements;
+      this.totalElements = res.totalItems;
     });
   }
 
@@ -102,6 +126,8 @@ export class StudentReportComponent implements OnInit {
     this.page = 0;
     this.loadStudents();
   }
+
+
 
   onPageChange(newPage: number) {
     this.page = newPage;
@@ -112,17 +138,26 @@ export class StudentReportComponent implements OnInit {
     let obs;
     let fileName = `students.${type === 'excel' ? 'xlsx' : type}`;
 
-    if (type === 'excel') obs = this.studentService.exportExcel();
-    else if (type === 'csv') obs = this.studentService.exportCsv();
-    else obs = this.studentService.exportPdf();
+    this.toastr.info(`Preparing ${type.toUpperCase()} export...`, 'Export Started');
 
-    obs.subscribe((blob: Blob) => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      window.URL.revokeObjectURL(url);
+    if (type === 'excel') obs = this.studentService.exportExcel(this.searchId, this.selectedClass);
+    else if (type === 'csv') obs = this.studentService.exportCsv(this.searchId, this.selectedClass);
+    else obs = this.studentService.exportPdf(this.searchId, this.selectedClass);
+
+    obs.subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.toastr.success(`${type.toUpperCase()} file downloaded.`, 'Export Complete');
+      },
+      error: (err) => {
+        this.toastr.error(`Failed to export ${type.toUpperCase()}.`, 'Export Error');
+        console.error('Export error', err);
+      }
     });
   }
 }

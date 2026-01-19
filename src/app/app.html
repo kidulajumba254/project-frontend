@@ -3,10 +3,19 @@
     <div class="header-content">
       <h1>{{ title() }}</h1>
       <div class="actions">
-        <button class="btn btn-primary" (click)="onGenerateData()">Generate Mock Data</button>
+        <div class="input-group">
+          <input type="number" [(ngModel)]="recordCount" class="form-input" placeholder="Records count">
+          <button class="btn btn-primary" (click)="onGenerateData()">Generate Mock Data</button>
+        </div>
+        
         <div class="upload-wrapper">
           <label for="excel-upload" class="btn btn-secondary">Process Excel</label>
-          <input id="excel-upload" type="file" (change)="onFileSelected($event)" style="display: none;">
+          <input id="excel-upload" type="file" (change)="onFileSelected($event)" accept=".xlsx" style="display: none;">
+        </div>
+
+        <div class="upload-wrapper">
+          <label for="csv-upload" class="btn btn-success">Upload CSV to DB</label>
+          <input id="csv-upload" type="file" (change)="onCsvFileSelected($event)" accept=".csv" style="display: none;">
         </div>
       </div>
     </div>

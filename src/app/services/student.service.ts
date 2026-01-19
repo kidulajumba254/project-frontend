@@ -6,39 +6,62 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class StudentService {
-  private apiUrl = 'http://localhost:8081/api/students';
+
+  private studentsApi = 'http://localhost:8081/api/students';
+  private dataApi = 'http://localhost:8081/api/data';
 
   constructor(private http: HttpClient) { }
 
-  generateData(count: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/generate?count=${count}`, {});
+  generateData(numberOfRecords: number): Observable<any> {
+    return this.http.post(`${this.dataApi}/generate?numberOfRecords=${numberOfRecords}`, {});
   }
 
   processExcel(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post(`${this.apiUrl}/process`, formData);
+    return this.http.post(`${this.dataApi}/process-excel`, formData);
   }
 
   uploadCsv(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post(`${this.apiUrl}/upload`, formData);
+    return this.http.post(`${this.dataApi}/upload-csv`, formData);
   }
 
   getStudents(params: any): Observable<any> {
-    return this.http.get(this.apiUrl, { params });
+    return this.http.get(this.studentsApi, { params });
   }
 
-  exportExcel(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/export/excel`, { responseType: 'blob' });
+  exportExcel(studentId?: string, studentClass?: string): Observable<Blob> {
+    let params: any = {};
+    if (studentId) params.studentId = studentId;
+    if (studentClass && studentClass !== 'All') params.studentClass = studentClass;
+
+    return this.http.get(`${this.studentsApi}/export/excel`, {
+      params,
+      responseType: 'blob'
+    });
   }
 
-  exportCsv(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/export/csv`, { responseType: 'blob' });
+  exportCsv(studentId?: string, studentClass?: string): Observable<Blob> {
+    let params: any = {};
+    if (studentId) params.studentId = studentId;
+    if (studentClass && studentClass !== 'All') params.studentClass = studentClass;
+
+    return this.http.get(`${this.studentsApi}/export/csv`, {
+      params,
+      responseType: 'blob'
+    });
   }
 
-  exportPdf(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/export/pdf`, { responseType: 'blob' });
+  exportPdf(studentId?: string, studentClass?: string): Observable<Blob> {
+    let params: any = {};
+    if (studentId) params.studentId = studentId;
+    if (studentClass && studentClass !== 'All') params.studentClass = studentClass;
+
+    return this.http.get(`${this.studentsApi}/export/pdf`, {
+      params,
+      responseType: 'blob'
+    });
   }
 }

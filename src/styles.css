@@ -1,4 +1,5 @@
 
+@import 'ngx-toastr/toastr';
 :root {
     /* Color Palette - Modern & Premium */
     --primary: hsl(221, 83%, 53%);
