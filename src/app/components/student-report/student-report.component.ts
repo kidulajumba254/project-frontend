@@ -135,6 +135,27 @@ export class StudentReportComponent implements OnInit {
   }
 
   onExport(type: string) {
+    // Check if we should use Async flow (for large datasets / no filters)
+    if (!this.searchId && this.selectedClass === 'All') {
+      this.toastr.info(`Starting Bulk ${type.toUpperCase()} Export...`, 'Export Task Started');
+      let obs;
+      if (type === 'excel') obs = this.studentService.exportAllExcel();
+      else if (type === 'csv') obs = this.studentService.exportAllCsv();
+      else obs = this.studentService.exportAllPdf();
+
+      obs.subscribe({
+        next: (res: any) => {
+          this.progressService.watchProgress(res.taskId).subscribe();
+          this.toastr.success('Export task in progress. You can download the file from the overlay once finished.', 'Task Queued');
+        },
+        error: (err) => {
+          this.toastr.error('Failed to start bulk export.', 'Error');
+        }
+      });
+      return;
+    }
+
+    // Sync flow for filtered exports
     let obs;
     let fileName = `students.${type === 'excel' ? 'xlsx' : type}`;
 
