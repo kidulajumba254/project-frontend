@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -64,4 +65,21 @@ export class StudentService {
       responseType: 'blob'
     });
   }
+
+  exportAllExcel(): Observable<any> {
+    return this.http.post(`${this.studentsApi}/export/all/excel`, {});
+  }
+
+  exportAllCsv(): Observable<any> {
+    return this.http.post(`${this.studentsApi}/export/all/csv`, {});
+  }
+
+  exportAllPdf(): Observable<any> {
+    return this.http.post(`${this.studentsApi}/export/all/pdf`, {});
+  }
+
+  downloadExport(fileName: string): string {
+    return `${this.studentsApi}/export/download/${fileName}`;
+  }
 }
+
