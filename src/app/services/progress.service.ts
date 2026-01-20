@@ -7,10 +7,14 @@ export interface ProgressUpdate {
   taskId: string;
   currentRecords: number;
   totalRecords: number;
-  timeTakenMs: number;
-  percentage: number;
+  timeTakenSeconds?: number;
+  timeTakenMs?: number;
+  timeTaken?: number;
+  percentage?: number;
+  progress?: number;
   completed: boolean;
   status: string;
+  filePath?: string;
 }
 
 @Injectable({
