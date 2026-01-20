@@ -26,6 +26,9 @@ import { ProgressUpdate } from '../../services/progress.service';
             <span class="label">Time Taken</span>
             {{ (update.timeTakenMs ?? update.timeTaken ?? (update.timeTakenSeconds ? update.timeTakenSeconds * 1000 : 0)) / 1000 | number:'1.1-2' }}s
           </div>
+          <div *ngIf="update.completed && update.filePath" style="margin-top: 15px; text-align: center;">
+            <a [href]="getDownloadUrl(update.filePath)" class="btn btn-success" target="_blank" style="width: 100%; text-decoration: none; display: inline-block;">Download File</a>
+          </div>
         </div>
       </div>
     </div>
@@ -35,6 +38,12 @@ import { ProgressUpdate } from '../../services/progress.service';
 export class ProgressOverlayComponent {
   @Input() update: ProgressUpdate | null = null;
   @Output() close = new EventEmitter<void>();
+
+  constructor(private studentService: StudentService) { }
+
+  getDownloadUrl(fileName: string): string {
+    return this.studentService.downloadExport(fileName);
+  }
 
   onClose() {
     this.close.emit();
