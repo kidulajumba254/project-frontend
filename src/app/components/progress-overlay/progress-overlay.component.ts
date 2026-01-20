@@ -27,7 +27,7 @@ import { ProgressUpdate } from '../../services/progress.service';
             {{ (update.timeTakenMs ?? update.timeTaken ?? (update.timeTakenSeconds ? update.timeTakenSeconds * 1000 : 0)) / 1000 | number:'1.1-2' }}s
           </div>
           <div *ngIf="update.completed && update.filePath" style="margin-top: 15px; text-align: center;">
-            <a [href]="getDownloadUrl(update.filePath)" class="btn btn-success" target="_blank" style="width: 100%; text-decoration: none; display: inline-block;">Download File</a>
+            <a [href]="getDownloadUrl(update.filePath!)" class="btn btn-success" target="_blank" style="width: 100%; text-decoration: none; display: inline-block; color: white; background-color: #28a745; border-radius: 4px; padding: 10px;">Download File</a>
           </div>
         </div>
       </div>
